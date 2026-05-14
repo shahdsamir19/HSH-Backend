@@ -1,30 +1,18 @@
 import os
-from pathlib import Path
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 from dotenv import load_dotenv
 
 load_dotenv()
 
-# =====================================
-# FastAPI App
-# =====================================
 app = FastAPI(
     title="HackShield Heroes AI",
     version="2.0"
 )
 
-
-# =====================================
-# Request Model
-# =====================================
 class ChatRequest(BaseModel):
     message: str
 
-
-# =====================================
-# HSH Cybersecurity Expert Prompt
-# =====================================
 HSH_RULES = """
 You are HSH Cyber Expert, the official cybersecurity AI assistant of HackShield Heroes (HSH).
 
@@ -122,10 +110,10 @@ Example:
 A fake gaming reward message asking you to log in.
 
 How to stay safe:
-• Check links carefully
-• Verify sender identity
-• Avoid urgent suspicious messages
-• Enable two-factor authentication"
+- Check links carefully
+- Verify sender identity
+- Avoid urgent suspicious messages
+- Enable two-factor authentication"
 
 FIRST MESSAGE:
 When a new conversation starts say:
@@ -135,79 +123,30 @@ When a new conversation starts say:
 Ask me anything about cybersecurity — phishing, malware, passwords, ethical hacking, network security, careers, or staying safe online 🛡️'
 """
 
-
-# =====================================
-# Lazy Gemini Client
-# =====================================
 _client = None
 
-
 def get_ai_client():
-    """Initialize Gemini client safely."""
     global _client
 
     if _client:
         return _client
 
-    SERVICE_ACCOUNT_FILE = os.getenv(
-        "GOOGLE_SERVICE_ACCOUNT_FILE"
-    )
+    API_KEY = os.getenv("GOOGLE_GENAI_API_KEY")
 
-    API_KEY = os.getenv(
-        "GOOGLE_GENAI_API_KEY"
-    )
+    if not API_KEY:
+        raise RuntimeError(
+            "GOOGLE_GENAI_API_KEY environment variable is not set"
+        )
 
     try:
         from google import genai
-
-        # Service Account Authentication
-        if SERVICE_ACCOUNT_FILE:
-            service_account_path = Path(
-                SERVICE_ACCOUNT_FILE
-            ).resolve()
-
-            if not service_account_path.exists():
-                raise FileNotFoundError(
-                    f"Service account file not found: {service_account_path}"
-                )
-
-            from google.oauth2 import service_account
-
-            credentials = (
-                service_account.Credentials
-                .from_service_account_file(
-                    service_account_path
-                )
-            )
-
-            _client = genai.Client(
-                credentials=credentials
-            )
-
-        # API Key Authentication
-        elif API_KEY:
-            _client = genai.Client(
-                api_key=API_KEY
-            )
-
-        else:
-            raise RuntimeError(
-                "No credentials found. "
-                "Set GOOGLE_SERVICE_ACCOUNT_FILE "
-                "or GOOGLE_GENAI_API_KEY"
-            )
-
+        _client = genai.Client(api_key=API_KEY)
         return _client
 
     except Exception as e:
-        raise RuntimeError(
-            f"Gemini initialization failed: {str(e)}"
-        )
+        raise RuntimeError(f"Gemini initialization failed: {str(e)}")
 
 
-# =====================================
-# Chat Endpoint
-# =====================================
 @app.post("/chatbot")
 async def chat(request: ChatRequest):
 
@@ -247,16 +186,12 @@ User Question:
 
     except Exception as e:
         print("AI generation failed:", e)
-
         raise HTTPException(
             status_code=500,
             detail=f"AI generation failed: {str(e)}"
         )
 
 
-# =====================================
-# Health Check
-# =====================================
 @app.get("/")
 async def root():
     return {
