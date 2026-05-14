@@ -10,6 +10,7 @@ const sequelize = new Sequelize(process.env.DATABASE_URL, {
   dialectOptions: {
     ssl: { require: true, rejectUnauthorized: false },
   },
+  define: { underscored: true, timestamps: true }, // 👈 add this line
   logging: process.env.NODE_ENV === 'production' ? false : (msg) => console.log('[Sequelize]', msg),
   pool: { max: 10, min: 0, acquire: 30000, idle: 10000 },
 });
