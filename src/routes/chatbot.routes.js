@@ -46,7 +46,7 @@ router.post("/message", async (req, res) => {
       return res.status(400).json({ success: false, message: "Message cannot be empty" });
     }
 
-    return res.json({ success: true, response: `Echo: ${message}` });
+   
 
     const pythonUrl = process.env.PYTHON_CHATBOT_URL || "http://localhost:8000/chatbot";
 
