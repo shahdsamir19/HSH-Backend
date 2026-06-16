@@ -1,8 +1,5 @@
 import User from '../models/user.model.js';
 import bcrypt from 'bcrypt';
-import KYC from '../models/kyc.model.js';
-import Transaction from '../models/transaction.model.js';
-import Escrow from '../models/escrow.model.js';
 import { Op } from 'sequelize';
 
 export const getUsers = async (req, res) => {
