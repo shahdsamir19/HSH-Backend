@@ -25,19 +25,9 @@ const User = sequelize.define('User', {
     type: DataTypes.STRING,
     allowNull: false,
     unique: true,
-    validate: { isEmail: true },
-  },
-  otp: {
-  type: DataTypes.STRING,
-  allowNull: true,
-  },
-  otpExpires: {
-    type: DataTypes.DATE,
-    allowNull: true,
-  },
-  isVerified: {
-    type: DataTypes.BOOLEAN,
-    defaultValue: false,
+    validate: {
+      isEmail: true,
+    },
   },
 
   password: {
@@ -45,9 +35,30 @@ const User = sequelize.define('User', {
     allowNull: false,
   },
 
+  otp: {
+    type: DataTypes.STRING,
+    allowNull: true,
+  },
+
+  otpExpires: {
+    type: DataTypes.DATE,
+    allowNull: true,
+  },
+
+  isVerified: {
+    type: DataTypes.BOOLEAN,
+    defaultValue: false,
+  },
+
   role: {
     type: DataTypes.STRING,
-    defaultValue: 'student', // 🔥 changed
+    defaultValue: 'student',
+  },
+
+  score: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+    defaultValue: 0,
   },
 
 }, {

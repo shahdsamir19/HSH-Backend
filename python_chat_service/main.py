@@ -2,6 +2,7 @@ import os
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 from dotenv import load_dotenv
+from groq import Groq
 
 load_dotenv()
 
@@ -131,20 +132,19 @@ def get_ai_client():
     if _client:
         return _client
 
-    API_KEY = os.getenv("GOOGLE_GENAI_API_KEY")
+    API_KEY = os.getenv("GROQ_API_KEY")
 
     if not API_KEY:
         raise RuntimeError(
-            "GOOGLE_GENAI_API_KEY environment variable is not set"
+            "GROQ_API_KEY environment variable is not set"
         )
 
     try:
-        from google import genai
-        _client = genai.Client(api_key=API_KEY)
+        _client = Groq(api_key=API_KEY)
         return _client
 
     except Exception as e:
-        raise RuntimeError(f"Gemini initialization failed: {str(e)}")
+        raise RuntimeError(f"Groq initialization failed: {str(e)}")
 
 
 @app.post("/chatbot")
@@ -161,21 +161,17 @@ async def chat(request: ChatRequest):
     client = get_ai_client()
 
     try:
-        prompt = f"""
-{HSH_RULES}
-
-User Question:
-{user_message}
-"""
-
-        response = client.models.generate_content(
-            model="gemini-1.5-pro",
-            contents=prompt
+        response = client.chat.completions.create(
+            model="llama-3.3-70b-versatile",
+            messages=[
+                {"role": "system", "content": HSH_RULES},
+                {"role": "user", "content": user_message}
+            ]
         )
 
         reply_text = (
-            response.text
-            if response.text
+            response.choices[0].message.content
+            if response.choices[0].message.content
             else "🛡️ I couldn't generate a response."
         )
 

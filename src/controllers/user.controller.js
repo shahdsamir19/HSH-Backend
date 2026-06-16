@@ -171,4 +171,48 @@ export const getProfile = async (req, res) => {
       error: error.message
     });
   }
+
+  
+};
+
+export const getScore = async (req, res) => {
+  try {
+    const user = await User.findByPk(req.user.id, {
+      attributes: ['score']
+    });
+
+    return res.status(200).json({
+      success: true,
+      score: user.score
+    });
+
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: error.message
+    });
+  }
+};
+
+export const updateScore = async (req, res) => {
+  try {
+    const { points } = req.body;
+
+    const user = await User.findByPk(req.user.id);
+
+    user.score += points;
+
+    await user.save();
+
+    return res.status(200).json({
+      success: true,
+      score: user.score
+    });
+
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: error.message
+    });
+  }
 };
