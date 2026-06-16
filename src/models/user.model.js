@@ -10,17 +10,14 @@ const User = sequelize.define('User', {
     defaultValue: DataTypes.UUIDV4,
     primaryKey: true,
   },
-
   firstName: {
     type: DataTypes.STRING,
     allowNull: false,
   },
-
   lastName: {
     type: DataTypes.STRING,
     allowNull: false,
   },
-
   email: {
     type: DataTypes.STRING,
     allowNull: false,
@@ -29,42 +26,40 @@ const User = sequelize.define('User', {
       isEmail: true,
     },
   },
-
   password: {
     type: DataTypes.STRING,
     allowNull: false,
   },
-
   otp: {
     type: DataTypes.STRING,
     allowNull: true,
   },
-
   otpExpires: {
     type: DataTypes.DATE,
     allowNull: true,
   },
-
   isVerified: {
     type: DataTypes.BOOLEAN,
     defaultValue: false,
   },
-
   role: {
     type: DataTypes.STRING,
     defaultValue: 'student',
   },
-
   score: {
     type: DataTypes.INTEGER,
     allowNull: false,
     defaultValue: 0,
   },
-
+  // Added progress tracking as a JSON array of level IDs (e.g.,)
+  completedLevels: {
+    type: DataTypes.JSON,
+    allowNull: false,
+    defaultValue: [],
+  },
 }, {
   tableName: 'users',
   timestamps: true,
-
   hooks: {
     beforeCreate: async (user) => {
       user.password = await bcrypt.hash(user.password, saltRounds);
