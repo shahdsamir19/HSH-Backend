@@ -213,3 +213,47 @@ export const updateScore = async (req, res) => {
     });
   }
 };
+
+export const getUserProgress = async (req, res) => {
+  try {
+    // Assuming your auth middleware populates req.user.id
+    const user = await User.findByPk(req.user.id, {
+      attributes: ['completedLevels', 'score']
+    });
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    return res.status(200).json({
+      completedLevels: user.completedLevels,
+      score: user.score
+    });
+  } catch (error) {
+    return res.status(500).json({ message: "Server error", error: error.message });
+  }
+};
+
+export const completeLevel = async (req, res) => {
+  try {
+    const { levelId, pointsAwarded } = req.body;
+    const user = await User.findByPk(req.user.id);
+
+    let currentLevels = user.completedLevels || [];
+    
+    // Only add if they haven't completed it before
+    if (!currentLevels.includes(levelId)) {
+      currentLevels.push(levelId);
+      user.completedLevels = currentLevels;
+      user.score += pointsAwarded || 0;
+      
+      // Sequelize requires flagging mutation changes on JSON fields
+      user.changed('completedLevels', true);
+      await user.save();
+    }
+
+    return res.status(200).json({ message: "Progress saved!", completedLevels: user.completedLevels, score: user.score });
+  } catch (error) {
+    return res.status(500).json({ message: "Failed to update progress", error: error.message });
+  }
+};
