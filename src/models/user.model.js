@@ -56,6 +56,7 @@ const User = sequelize.define('User', {
     type: DataTypes.JSON,
     allowNull: false,
     defaultValue: [],
+    field: 'completedLevels'
   },
 }, {
   tableName: 'users',
