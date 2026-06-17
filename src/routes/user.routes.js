@@ -1,23 +1,20 @@
 import express from 'express';
+import { authMiddleware } from '../middlewares/auth.middleware.js';
+import { 
+  getUserProgress, 
+  completeLevel, 
+  getScore, 
+  updateScore 
+} from '../controllers/user.controller.js';
 
 const router = express.Router();
 
-import { authMiddleware } from '../middlewares/auth.middleware.js';
-import { getUserProgress, completeLevel } from '../controllers/user.controller.js';
-
-import {
-  getScore,
-  updateScore
-} from '../controllers/user.controller.js';
-
+// Score management endpoints
 router.get('/score', authMiddleware, getScore);
-
 router.post('/score', authMiddleware, updateScore);
 
-// Get current progress to render the map
-router.get('/progress', verifyToken, getUserProgress);
-
-// Call this endpoint from individual level pages when a kid wins
-router.post('/complete-level', verifyToken, completeLevel);
+// Map progress endpoints (Fix: replaced verifyToken with authMiddleware)
+router.get('/progress', authMiddleware, getUserProgress);
+router.post('/complete-level', authMiddleware, completeLevel);
 
 export default router;
