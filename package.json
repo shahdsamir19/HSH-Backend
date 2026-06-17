@@ -4,7 +4,8 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "build": "npx sequelize-cli db:migrate && echo 'Build finished'",
+    "vercel-build": "npx sequelize-cli db:migrate",
+    "build": "echo 'Build finished'",
     "start": "node server.js",
     "dev": "nodemon server.js"
   },
