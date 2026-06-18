@@ -8,51 +8,84 @@ import userRoutes from './routes/user.routes.js';
 
 const app = express();
 
-// ✅ CORS (simple for development)
-app.use(cors({
+
+// ===============================
+// ✅ CORS CONFIG (FIXED)
+// ===============================
+const corsOptions = {
   origin: [
     "http://127.0.0.1:5500",
     "http://localhost:5500"
   ],
-  methods: ["GET", "POST", "OPTIONS"],
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
   allowedHeaders: [
     "Content-Type",
     "Authorization"
-  ]
-}));
+  ],
+  credentials: true,
+  optionsSuccessStatus: 204
+};
 
-app.options("*", cors());
+// IMPORTANT: apply cors BEFORE routes
+app.use(cors(corsOptions));
 
+
+// ===============================
+// ✅ Handle preflight requests explicitly
+// ===============================
+app.options("*", cors(corsOptions));
+
+
+// ===============================
 // ✅ Logging
+// ===============================
 app.use(morgan('dev'));
 
-// ✅ Body parsing
+
+// ===============================
+// ✅ Body parsing (must be BEFORE routes)
+// ===============================
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+
+// ===============================
 // ✅ Routes
+// ===============================
 app.use('/api/auth', authRoutes);
 app.use('/api/chat', chatRoutes);
 app.use('/api/users', userRoutes);
 
+
+// ===============================
 // ✅ Health check
+// ===============================
 app.get('/ping', (req, res) => {
   res.json({ message: 'pong 🏓' });
 });
 
+
+// ===============================
 // ✅ Root
+// ===============================
 app.get('/', (req, res) => {
   res.json({ message: 'Cybersecurity Game API is running 🚀' });
 });
 
-// ✅ 404 handler
+
+// ===============================
+// ❌ 404 handler (must be after routes)
+// ===============================
 app.use((req, res) => {
   res.status(404).json({
     message: 'Route not found'
   });
 });
 
-// ✅ Global error handler
+
+// ===============================
+// ❌ Global error handler
+// ===============================
 app.use((err, req, res, next) => {
   console.error(err);
 
