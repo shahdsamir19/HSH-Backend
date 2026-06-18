@@ -9,7 +9,19 @@ import userRoutes from './routes/user.routes.js';
 const app = express();
 
 // ✅ CORS (simple for development)
-app.use(cors());
+app.use(cors({
+  origin: [
+    "http://127.0.0.1:5500",
+    "http://localhost:5500"
+  ],
+  methods: ["GET", "POST", "OPTIONS"],
+  allowedHeaders: [
+    "Content-Type",
+    "Authorization"
+  ]
+}));
+
+app.options("*", cors());
 
 // ✅ Logging
 app.use(morgan('dev'));
