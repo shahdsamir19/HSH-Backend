@@ -1,18 +1,15 @@
+// server.js
 import dotenv from 'dotenv';
 dotenv.config();
-
 import app from './src/app.js';
 import sequelize from './src/config/database.js';
 
 const PORT = process.env.PORT || 5001;
 
-// 1. Database Connection Logic
-// We move this to a separate check so Vercel can reuse the connection
 const connectDB = async () => {
   try {
     await sequelize.authenticate();
     console.log("✅ Database connected");
-
     if (process.env.NODE_ENV !== 'production') {
       await sequelize.sync({ alter: true });
       console.log("✅ Database synced");
@@ -22,19 +19,19 @@ const connectDB = async () => {
   }
 };
 
-// 2. Conditional Execution
-// Only call app.listen() if we are NOT on Vercel (local development)
-if (process.env.NODE_ENV !== 'production') {
+// Vercel automatically sets process.env.VERCEL = '1' on its serverless
+// platform — that's the actual signal for "don't call listen()", not
+// NODE_ENV. Railway (and most other hosts) commonly set NODE_ENV=production
+// too, but they still need a real listening server, so checking VERCEL
+// specifically keeps Railway working correctly either way.
+if (!process.env.VERCEL) {
   connectDB().then(() => {
     app.listen(PORT, '0.0.0.0', () => {
-      console.log(`🚀 Server running locally on http://localhost:${PORT}`);
+      console.log(`🚀 Server running on port ${PORT}`);
     });
   });
 } else {
-  // On Vercel (Production), just connect to DB
   connectDB();
 }
 
-// 3. EXPORT the app for Vercel
-// Vercel needs this export to wrap your app in a serverless function
 export default app;
