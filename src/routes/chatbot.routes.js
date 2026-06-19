@@ -11,7 +11,8 @@ router.post("/message", async (req, res) => {
 
     const pythonUrl = process.env.PYTHON_CHATBOT_URL || "http://localhost:8000/chatbot";
     
-    console.log("Calling Python service at:", pythonUrl); // 👈 log the URL being called
+    console.log("Calling Python service at:", pythonUrl);
+    console.log("Request body:", { message });
 
     const response = await axios.post(pythonUrl, { message }, {
       timeout: 30000, // 30 second timeout
@@ -21,6 +22,9 @@ router.post("/message", async (req, res) => {
     res.json(response.data);
 
   } catch (error) {
+    console.error("Status:", error.response?.status);
+    console.error("Headers:", error.response?.headers);
+    console.error("Data:", error.response?.data);
     console.error("Chatbot proxy error:", error.message);
     console.error("Full error:", error.response?.data || error.code); // 👈 log full error
 
