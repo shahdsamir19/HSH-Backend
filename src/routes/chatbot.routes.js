@@ -32,7 +32,14 @@ router.post("/message", async (req, res) => {
       message: "Chatbot proxy failed",
       detail: error.message // 👈 return actual error in response
     });
+    
   }
+});
+router.get("/test", (req, res) => {
+  res.json({
+    success: true,
+    message: "chat route works"
+  });
 });
 
 export default router;
