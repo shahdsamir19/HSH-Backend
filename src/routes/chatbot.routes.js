@@ -1,44 +1,86 @@
 import express from "express";
 import axios from "axios";
+
 const router = express.Router();
 
 router.post("/message", async (req, res) => {
   try {
+    console.log("=================================");
+    console.log("CHAT ROUTE HIT");
+    console.log("Method:", req.method);
+    console.log("Body:", req.body);
+
     const { message } = req.body;
+
     if (!message) {
-      return res.status(400).json({ success: false, message: "Message cannot be empty" });
+      console.log("Message missing");
+      return res.status(400).json({
+        success: false,
+        message: "Message cannot be empty"
+      });
     }
 
-    const pythonUrl = process.env.PYTHON_CHATBOT_URL || "http://localhost:8000/chatbot";
-    
-    console.log("Calling Python service at:", pythonUrl);
-    console.log("Request body:", { message });
+    const pythonUrl =
+      process.env.PYTHON_CHATBOT_URL ||
+      "http://localhost:8000/chatbot";
 
-    const response = await axios.post(pythonUrl, { message }, {
-      timeout: 30000, // 30 second timeout
-      headers: { "Content-Type": "application/json" }
-    });
+    console.log("PYTHON_CHATBOT_URL =", pythonUrl);
 
-    res.json(response.data);
+    const response = await axios.post(
+      pythonUrl,
+      { message },
+      {
+        timeout: 30000,
+        headers: {
+          "Content-Type": "application/json"
+        },
+        validateStatus: () => true
+      }
+    );
+
+    console.log("=================================");
+    console.log("PYTHON RESPONSE STATUS:");
+    console.log(response.status);
+
+    console.log("PYTHON RESPONSE DATA:");
+    console.log(response.data);
+
+    console.log("=================================");
+
+    return res.status(response.status).json(response.data);
 
   } catch (error) {
-    console.error("Status:", error.response?.status);
-    console.error("Headers:", error.response?.headers);
-    console.error("Data:", error.response?.data);
-    console.error("Chatbot proxy error:", error.message);
-    console.error("Full error:", error.response?.data || error.code); // 👈 log full error
+
+    console.log("=================================");
+    console.log("CHAT ROUTE ERROR");
+    console.log("=================================");
+
+    console.error("Error message:", error.message);
 
     if (error.response) {
-      return res.status(error.response.status).json(error.response.data);
+      console.error("Response status:", error.response.status);
+      console.error("Response data:", error.response.data);
+      console.error("Response headers:", error.response.headers);
+
+      return res.status(error.response.status).json({
+        success: false,
+        source: "python-service",
+        status: error.response.status,
+        data: error.response.data
+      });
     }
-    res.status(500).json({ 
-      success: false, 
-      message: "Chatbot proxy failed",
-      detail: error.message // 👈 return actual error in response
+
+    console.error("Error code:", error.code);
+
+    return res.status(500).json({
+      success: false,
+      source: "node-backend",
+      message: error.message,
+      code: error.code
     });
-    
   }
 });
+
 router.get("/test", (req, res) => {
   res.json({
     success: true,
