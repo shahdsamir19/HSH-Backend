@@ -1,4 +1,4 @@
-import UserLevelProgress from '../models/UserLevelProgress.model.js';
+import UserLevelProgress from '../models/Userlevelprogress.model.js';
 import { calculateGrade } from './grading.service.js';
 
 /**
