@@ -5,6 +5,7 @@ import morgan from 'morgan';
 import authRoutes from './routes/auth.routes.js';
 import chatRoutes from './routes/chatbot.routes.js';
 import userRoutes from './routes/user.routes.js';
+import progressRoutes from './routes/progress.routes.js';
 
 const app = express();
 
@@ -49,6 +50,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use('/api/auth', authRoutes);
 app.use('/api/chat', chatRoutes);
 app.use('/api/users', userRoutes);
+app.use('/api/progress', progressRoutes); 
 
 // ===============================
 // ✅ Health check
