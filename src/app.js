@@ -5,7 +5,7 @@ import morgan from 'morgan';
 import authRoutes from './routes/auth.routes.js';
 import chatRoutes from './routes/chatbot.routes.js';
 import userRoutes from './routes/user.routes.js';
-import progressRoutes from './routes/progress.routes.js';
+import progressRoutes from './routes/Progress.routes.js';
 
 const app = express();
 
