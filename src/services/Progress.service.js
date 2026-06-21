@@ -1,5 +1,5 @@
 import UserLevelProgress from '../models/Userlevelprogress.model.js';
-import { calculateGrade } from './grading.service.js';
+import { calculateGrade } from './Grading.service.js';
 
 /**
  * Submit a level attempt result for a user.
