@@ -4,7 +4,7 @@ import {
   submitProgress,
   getAllProgress,
   getOneLevelProgress,
-} from '../controllers/progress.controller.js';
+} from '../controllers/Progress.controller.js';
 
 const router = express.Router();
 

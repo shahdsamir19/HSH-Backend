@@ -3,7 +3,7 @@ import {
   getFullProgress,
   getLevelProgress,
   formatLevelRow,
-} from '../services/progress.service.js';
+} from '../services/Progress.service.js';
 
 // Hardcoded for now — see note in progress.service.js about
 // completionPercentage needing a real denominator. Bump this when a
