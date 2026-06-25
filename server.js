@@ -1,10 +1,15 @@
 // server.js
 import dotenv from 'dotenv';
 dotenv.config();
+import http from 'http';
 import app from './src/app.js';
 import sequelize from './src/config/database.js';
+import { initializeSocket } from './src/socket/socket.js';
 
 const PORT = process.env.PORT || 5001;
+
+const server = http.createServer(app);
+initializeSocket(server);
 
 const connectDB = async () => {
   try {
@@ -26,7 +31,7 @@ const connectDB = async () => {
 // specifically keeps Railway working correctly either way.
 if (!process.env.VERCEL) {
   connectDB().then(() => {
-    app.listen(PORT, '0.0.0.0', () => {
+    server.listen(PORT, '0.0.0.0', () => {
       console.log(`🚀 Server running on port ${PORT}`);
     });
   });
