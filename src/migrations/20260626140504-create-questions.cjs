@@ -2,7 +2,7 @@
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable('Questions', {
+    await queryInterface.createTable('questions', {
       id: {
         type: Sequelize.INTEGER,
         primaryKey: true,
@@ -16,7 +16,7 @@ module.exports = {
         type: Sequelize.TEXT,
         allowNull: true
       },
-      correctAnswer: {
+      'correct_answer': {
         type: Sequelize.STRING,
         allowNull: false
       },
@@ -28,11 +28,11 @@ module.exports = {
         type: Sequelize.INTEGER,
         defaultValue: 10
       },
-      gameMode: {
+      'game_mode': {
         type: Sequelize.STRING,
         allowNull: false
       },
-      authorId: {
+      'author_id': {
         type: Sequelize.UUID,
         allowNull: true,
         references: {
@@ -41,12 +41,12 @@ module.exports = {
         },
         onDelete: 'SET NULL'
       },
-      createdAt: {
+      'created_at': {
         type: Sequelize.DATE,
         allowNull: false,
         defaultValue: Sequelize.literal('CURRENT_TIMESTAMP')
       },
-      updatedAt: {
+      'updated_at': {
         type: Sequelize.DATE,
         allowNull: false,
         defaultValue: Sequelize.literal('CURRENT_TIMESTAMP')
@@ -55,6 +55,6 @@ module.exports = {
   },
 
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable('Questions');
+    await queryInterface.dropTable('questions');
   }
 };

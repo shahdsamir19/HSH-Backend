@@ -2,13 +2,13 @@
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable('Posts', {
+    await queryInterface.createTable('posts', {
       id: {
         type: Sequelize.INTEGER,
         primaryKey: true,
         autoIncrement: true
       },
-      userId: {
+      'user_id': {
         type: Sequelize.UUID,
         allowNull: false,
         references: {
@@ -21,7 +21,7 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: false
       },
-      postType: {
+      'post_type': {
         type: Sequelize.STRING,
         allowNull: false
       },
@@ -33,16 +33,16 @@ module.exports = {
         type: Sequelize.TEXT,
         defaultValue: '[]'
       },
-      isReported: {
+      'is_reported': {
         type: Sequelize.BOOLEAN,
         defaultValue: false
       },
-      createdAt: {
+      'created_at': {
         type: Sequelize.DATE,
         allowNull: false,
         defaultValue: Sequelize.literal('CURRENT_TIMESTAMP')
       },
-      updatedAt: {
+      'updated_at': {
         type: Sequelize.DATE,
         allowNull: false,
         defaultValue: Sequelize.literal('CURRENT_TIMESTAMP')
@@ -51,6 +51,6 @@ module.exports = {
   },
 
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable('Posts');
+    await queryInterface.dropTable('posts');
   }
 };

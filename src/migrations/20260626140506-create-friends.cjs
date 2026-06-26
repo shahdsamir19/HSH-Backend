@@ -2,13 +2,13 @@
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable('Friends', {
+    await queryInterface.createTable('friends', {
       id: {
         type: Sequelize.INTEGER,
         primaryKey: true,
         autoIncrement: true
       },
-      requesterId: {
+      'requester_id': {
         type: Sequelize.UUID,
         allowNull: false,
         references: {
@@ -17,7 +17,7 @@ module.exports = {
         },
         onDelete: 'CASCADE'
       },
-      recipientId: {
+      'recipient_id': {
         type: Sequelize.UUID,
         allowNull: false,
         references: {
@@ -30,12 +30,12 @@ module.exports = {
         type: Sequelize.STRING,
         defaultValue: 'Pending'
       },
-      createdAt: {
+      'created_at': {
         type: Sequelize.DATE,
         allowNull: false,
         defaultValue: Sequelize.literal('CURRENT_TIMESTAMP')
       },
-      updatedAt: {
+      'updated_at': {
         type: Sequelize.DATE,
         allowNull: false,
         defaultValue: Sequelize.literal('CURRENT_TIMESTAMP')
@@ -44,6 +44,6 @@ module.exports = {
   },
 
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable('Friends');
+    await queryInterface.dropTable('friends');
   }
 };

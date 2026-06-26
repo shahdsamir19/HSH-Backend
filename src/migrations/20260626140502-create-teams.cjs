@@ -2,18 +2,18 @@
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable('Teams', {
+    await queryInterface.createTable('teams', {
       id: {
         type: Sequelize.INTEGER,
         primaryKey: true,
         autoIncrement: true
       },
-      roomCode: {
+      'room_code': {
         type: Sequelize.STRING,
         allowNull: false,
         unique: true
       },
-      missionName: {
+      'mission_name': {
         type: Sequelize.STRING,
         allowNull: false
       },
@@ -37,12 +37,12 @@ module.exports = {
         type: Sequelize.TEXT,
         defaultValue: '[]'
       },
-      createdAt: {
+      'created_at': {
         type: Sequelize.DATE,
         allowNull: false,
         defaultValue: Sequelize.literal('CURRENT_TIMESTAMP')
       },
-      updatedAt: {
+      'updated_at': {
         type: Sequelize.DATE,
         allowNull: false,
         defaultValue: Sequelize.literal('CURRENT_TIMESTAMP')
@@ -51,6 +51,6 @@ module.exports = {
   },
 
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable('Teams');
+    await queryInterface.dropTable('teams');
   }
 };

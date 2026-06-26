@@ -2,13 +2,13 @@
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable('UserBadges', {
+    await queryInterface.createTable('user_badges', {
       id: {
         type: Sequelize.INTEGER,
         primaryKey: true,
         autoIncrement: true
       },
-      userId: {
+      'user_id': {
         type: Sequelize.UUID,
         allowNull: false,
         references: {
@@ -17,25 +17,25 @@ module.exports = {
         },
         onDelete: 'CASCADE'
       },
-      badgeId: {
+      'badge_id': {
         type: Sequelize.INTEGER,
         allowNull: false,
         references: {
-          model: 'Badges',
+          model: 'badges',
           key: 'id'
         },
         onDelete: 'CASCADE'
       },
-      unlockedAt: {
+      'unlocked_at': {
         type: Sequelize.DATE,
         defaultValue: Sequelize.literal('CURRENT_TIMESTAMP')
       },
-      createdAt: {
+      'created_at': {
         type: Sequelize.DATE,
         allowNull: false,
         defaultValue: Sequelize.literal('CURRENT_TIMESTAMP')
       },
-      updatedAt: {
+      'updated_at': {
         type: Sequelize.DATE,
         allowNull: false,
         defaultValue: Sequelize.literal('CURRENT_TIMESTAMP')
@@ -44,6 +44,6 @@ module.exports = {
   },
 
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable('UserBadges');
+    await queryInterface.dropTable('user_badges');
   }
 };

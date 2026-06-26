@@ -2,13 +2,13 @@
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable('Notifications', {
+    await queryInterface.createTable('notifications', {
       id: {
         type: Sequelize.INTEGER,
         primaryKey: true,
         autoIncrement: true
       },
-      userId: {
+      'user_id': {
         type: Sequelize.UUID,
         allowNull: false,
         references: {
@@ -29,7 +29,7 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: false
       },
-      isRead: {
+      'is_read': {
         type: Sequelize.BOOLEAN,
         defaultValue: false
       },
@@ -37,7 +37,7 @@ module.exports = {
         type: Sequelize.STRING,
         defaultValue: 'generic'
       },
-      senderId: {
+      'sender_id': {
         type: Sequelize.UUID,
         allowNull: true,
         references: {
@@ -46,12 +46,12 @@ module.exports = {
         },
         onDelete: 'SET NULL'
       },
-      createdAt: {
+      'created_at': {
         type: Sequelize.DATE,
         allowNull: false,
         defaultValue: Sequelize.literal('CURRENT_TIMESTAMP')
       },
-      updatedAt: {
+      'updated_at': {
         type: Sequelize.DATE,
         allowNull: false,
         defaultValue: Sequelize.literal('CURRENT_TIMESTAMP')
@@ -60,6 +60,6 @@ module.exports = {
   },
 
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable('Notifications');
+    await queryInterface.dropTable('notifications');
   }
 };

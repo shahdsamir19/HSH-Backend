@@ -2,22 +2,22 @@
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable('BattlePlayers', {
+    await queryInterface.createTable('battle_players', {
       id: {
         type: Sequelize.INTEGER,
         primaryKey: true,
         autoIncrement: true
       },
-      battleId: {
+      'battle_id': {
         type: Sequelize.INTEGER,
         allowNull: false,
         references: {
-          model: 'Battles',
+          model: 'battles',
           key: 'id'
         },
         onDelete: 'CASCADE'
       },
-      userId: {
+      'user_id': {
         type: Sequelize.UUID,
         allowNull: false,
         references: {
@@ -26,11 +26,11 @@ module.exports = {
         },
         onDelete: 'CASCADE'
       },
-      socketId: {
+      'socket_id': {
         type: Sequelize.STRING,
         allowNull: true
       },
-      isConnected: {
+      'is_connected': {
         type: Sequelize.BOOLEAN,
         defaultValue: false
       },
@@ -58,7 +58,7 @@ module.exports = {
         type: Sequelize.TEXT,
         defaultValue: '[]'
       },
-      shieldActive: {
+      'shield_active': {
         type: Sequelize.BOOLEAN,
         defaultValue: false
       },
@@ -66,7 +66,7 @@ module.exports = {
         type: Sequelize.BOOLEAN,
         defaultValue: false
       },
-      readyForInvestigation: {
+      'ready_for_investigation': {
         type: Sequelize.BOOLEAN,
         defaultValue: false
       },
@@ -74,12 +74,12 @@ module.exports = {
         type: Sequelize.TEXT,
         defaultValue: '[]'
       },
-      createdAt: {
+      'created_at': {
         type: Sequelize.DATE,
         allowNull: false,
         defaultValue: Sequelize.literal('CURRENT_TIMESTAMP')
       },
-      updatedAt: {
+      'updated_at': {
         type: Sequelize.DATE,
         allowNull: false,
         defaultValue: Sequelize.literal('CURRENT_TIMESTAMP')
@@ -88,6 +88,6 @@ module.exports = {
   },
 
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable('BattlePlayers');
+    await queryInterface.dropTable('battle_players');
   }
 };

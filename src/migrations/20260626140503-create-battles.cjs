@@ -2,13 +2,13 @@
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable('Battles', {
+    await queryInterface.createTable('battles', {
       id: {
         type: Sequelize.INTEGER,
         primaryKey: true,
         autoIncrement: true
       },
-      gameMode: {
+      'game_mode': {
         type: Sequelize.STRING,
         allowNull: false
       },
@@ -28,32 +28,32 @@ module.exports = {
         type: Sequelize.TEXT,
         allowNull: true
       },
-      currentQuestion: {
+      'current_question': {
         type: Sequelize.TEXT,
         allowNull: true
       },
-      turnStartTime: {
+      'turn_start_time': {
         type: Sequelize.DATE,
         allowNull: true
       },
-      investigationStarted: {
+      'investigation_started': {
         type: Sequelize.BOOLEAN,
         defaultValue: false
       },
-      caseFile: {
+      'case_file': {
         type: Sequelize.TEXT,
         allowNull: true
       },
-      caseSolved: {
+      'case_solved': {
         type: Sequelize.BOOLEAN,
         defaultValue: false
       },
-      createdAt: {
+      'created_at': {
         type: Sequelize.DATE,
         allowNull: false,
         defaultValue: Sequelize.literal('CURRENT_TIMESTAMP')
       },
-      updatedAt: {
+      'updated_at': {
         type: Sequelize.DATE,
         allowNull: false,
         defaultValue: Sequelize.literal('CURRENT_TIMESTAMP')
@@ -62,6 +62,6 @@ module.exports = {
   },
 
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable('Battles');
+    await queryInterface.dropTable('battles');
   }
 };

@@ -2,22 +2,22 @@
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable('Reports', {
+    await queryInterface.createTable('reports', {
       id: {
         type: Sequelize.INTEGER,
         primaryKey: true,
         autoIncrement: true
       },
-      postId: {
+      'post_id': {
         type: Sequelize.INTEGER,
         allowNull: false,
         references: {
-          model: 'Posts',
+          model: 'posts',
           key: 'id'
         },
         onDelete: 'CASCADE'
       },
-      reportedBy: {
+      'reported_by': {
         type: Sequelize.UUID,
         allowNull: false,
         references: {
@@ -30,12 +30,12 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: false
       },
-      createdAt: {
+      'created_at': {
         type: Sequelize.DATE,
         allowNull: false,
         defaultValue: Sequelize.literal('CURRENT_TIMESTAMP')
       },
-      updatedAt: {
+      'updated_at': {
         type: Sequelize.DATE,
         allowNull: false,
         defaultValue: Sequelize.literal('CURRENT_TIMESTAMP')
@@ -44,6 +44,6 @@ module.exports = {
   },
 
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable('Reports');
+    await queryInterface.dropTable('reports');
   }
 };

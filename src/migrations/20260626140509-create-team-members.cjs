@@ -2,22 +2,22 @@
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable('TeamMembers', {
+    await queryInterface.createTable('team_members', {
       id: {
         type: Sequelize.INTEGER,
         primaryKey: true,
         autoIncrement: true
       },
-      teamId: {
+      'team_id': {
         type: Sequelize.INTEGER,
         allowNull: false,
         references: {
-          model: 'Teams',
+          model: 'teams',
           key: 'id'
         },
         onDelete: 'CASCADE'
       },
-      userId: {
+      'user_id': {
         type: Sequelize.UUID,
         allowNull: false,
         references: {
@@ -30,20 +30,20 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: false
       },
-      isLeader: {
+      'is_leader': {
         type: Sequelize.BOOLEAN,
         defaultValue: false
       },
-      isReady: {
+      'is_ready': {
         type: Sequelize.BOOLEAN,
         defaultValue: false
       },
-      createdAt: {
+      'created_at': {
         type: Sequelize.DATE,
         allowNull: false,
         defaultValue: Sequelize.literal('CURRENT_TIMESTAMP')
       },
-      updatedAt: {
+      'updated_at': {
         type: Sequelize.DATE,
         allowNull: false,
         defaultValue: Sequelize.literal('CURRENT_TIMESTAMP')
@@ -52,6 +52,6 @@ module.exports = {
   },
 
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable('TeamMembers');
+    await queryInterface.dropTable('team_members');
   }
 };
