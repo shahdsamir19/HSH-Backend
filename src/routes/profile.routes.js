@@ -18,6 +18,7 @@ router.get('/friends', authMiddleware, getFriends);
 router.post('/friends/add', authMiddleware, addFriend);
 router.post('/friends/respond', authMiddleware, respondFriendRequest);
 router.post('/avatar', authMiddleware, updateAvatar);
-router.get('/:id?', authMiddleware, getProfile);
+router.get('/', authMiddleware, getProfile);
+router.get('/:id', authMiddleware, getProfile);
 
 export default router;
