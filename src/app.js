@@ -6,6 +6,11 @@ import authRoutes from './routes/auth.routes.js';
 import chatRoutes from './routes/chatbot.routes.js';
 import userRoutes from './routes/user.routes.js';
 import progressRoutes from './routes/Progress.routes.js';
+// --- Cyber Arena Routes ---
+import profileRoutes from './routes/profile.routes.js';
+import leaderboardRoutes from './routes/leaderboard.routes.js';
+import communityRoutes from './routes/community.routes.js';
+import adminRoutes from './routes/admin.routes.js';
 
 const app = express();
 
@@ -50,7 +55,12 @@ app.use(express.urlencoded({ extended: true }));
 app.use('/api/auth', authRoutes);
 app.use('/api/chat', chatRoutes);
 app.use('/api/users', userRoutes);
-app.use('/api/progress', progressRoutes); 
+app.use('/api/progress', progressRoutes);
+// --- Cyber Arena Routes ---
+app.use('/api/arena/profile', profileRoutes);
+app.use('/api/arena/leaderboard', leaderboardRoutes);
+app.use('/api/arena/community', communityRoutes);
+app.use('/api/arena/admin', adminRoutes);
 
 // ===============================
 // ✅ Health check

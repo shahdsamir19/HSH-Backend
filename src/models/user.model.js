@@ -58,6 +58,31 @@ const User = sequelize.define('User', {
     defaultValue: [],
     field: 'completedLevels'
   },
+  // --- Cyber Arena Columns ---
+  xp: {
+    type: DataTypes.INTEGER,
+    defaultValue: 0
+  },
+  rank: {
+    type: DataTypes.STRING,
+    defaultValue: 'Cyber Rookie'
+  },
+  wins: {
+    type: DataTypes.INTEGER,
+    defaultValue: 0
+  },
+  losses: {
+    type: DataTypes.INTEGER,
+    defaultValue: 0
+  },
+  status: {
+    type: DataTypes.STRING,
+    defaultValue: 'Offline' // Offline, Online, Searching, Battle, Mission, Idle
+  },
+  avatar: {
+    type: DataTypes.STRING,
+    defaultValue: '🛡️'
+  }
 }, {
   tableName: 'users',
   timestamps: true,

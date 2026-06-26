@@ -9,7 +9,9 @@ import { initializeSocket } from './src/socket/socket.js';
 const PORT = process.env.PORT || 5001;
 
 const server = http.createServer(app);
-initializeSocket(server);
+const io = initializeSocket(server);
+// Make io accessible in HTTP controllers via req.app.get('io')
+app.set('io', io);
 
 const connectDB = async () => {
   try {
