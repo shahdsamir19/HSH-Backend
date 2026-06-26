@@ -2,27 +2,37 @@
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.addColumn('users', 'xp', {
+    const addColSafe = async (tableName, columnName, options) => {
+      try {
+        await queryInterface.addColumn(tableName, columnName, options);
+      } catch (err) {
+        if (!err.message.includes('already exists')) {
+          throw err;
+        }
+      }
+    };
+
+    await addColSafe('users', 'xp', {
       type: Sequelize.INTEGER,
       defaultValue: 0
     });
-    await queryInterface.addColumn('users', 'rank', {
+    await addColSafe('users', 'rank', {
       type: Sequelize.STRING,
       defaultValue: 'Cyber Rookie'
     });
-    await queryInterface.addColumn('users', 'wins', {
+    await addColSafe('users', 'wins', {
       type: Sequelize.INTEGER,
       defaultValue: 0
     });
-    await queryInterface.addColumn('users', 'losses', {
+    await addColSafe('users', 'losses', {
       type: Sequelize.INTEGER,
       defaultValue: 0
     });
-    await queryInterface.addColumn('users', 'status', {
+    await addColSafe('users', 'status', {
       type: Sequelize.STRING,
       defaultValue: 'Offline'
     });
-    await queryInterface.addColumn('users', 'avatar', {
+    await addColSafe('users', 'avatar', {
       type: Sequelize.STRING,
       defaultValue: '🛡️'
     });
