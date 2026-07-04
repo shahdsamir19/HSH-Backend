@@ -1,10 +1,10 @@
 import express from 'express';
 import { getLeaderboard, getMyStats } from '../controllers/leaderboard.controller.js';
-import { authMiddleware } from '../middlewares/auth.middleware.js';
+import { authMiddleware, arenaUnlockMiddleware } from '../middlewares/auth.middleware.js';
 
 const router = express.Router();
 
-router.get('/', getLeaderboard);
-router.get('/me', authMiddleware, getMyStats);
+router.get('/', authMiddleware, arenaUnlockMiddleware, getLeaderboard);
+router.get('/me', authMiddleware, arenaUnlockMiddleware, getMyStats);
 
 export default router;

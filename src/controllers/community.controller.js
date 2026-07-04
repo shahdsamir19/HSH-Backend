@@ -211,3 +211,56 @@ export const reportPost = async (req, res) => {
     res.status(500).json({ message: 'Server error' });
   }
 };
+
+// Share a Cyber Arena badge achievement to the Cyber Club community feed.
+// Reuses the existing Post model and socket broadcast — no new tables needed.
+export const shareBadgeToClub = async (req, res) => {
+  try {
+    const { badgeName, badgeIcon, badgeDescription } = req.body;
+    if (!badgeName) {
+      return res.status(400).json({ message: 'badgeName is required' });
+    }
+
+    const username = `${req.user.firstName} ${req.user.lastName}`;
+    const content = `🏆 I just unlocked the "${badgeIcon || '🏅'} ${badgeName}" badge in Cyber Arena! ${badgeDescription || ''} #CyberArena #Achievement`;
+
+    const post = await Post.create({
+      userId: req.user.id,
+      username,
+      postType: 'Achievement',
+      content,
+      likes: '[]'
+    });
+
+    const io = req.app.get('io');
+    if (io) {
+      io.emit('new-post', {
+        id: post.id,
+        userId: post.userId,
+        username: post.username,
+        postType: post.postType,
+        content: post.content,
+        likes: [],
+        comments: [],
+        createdAt: post.createdAt
+      });
+    }
+
+    res.status(201).json({
+      message: 'Badge shared to Cyber Club!',
+      post: {
+        id: post.id,
+        userId: post.userId,
+        username: post.username,
+        postType: post.postType,
+        content: post.content,
+        likes: [],
+        comments: [],
+        createdAt: post.createdAt
+      }
+    });
+  } catch (err) {
+    console.error('Error sharing badge to club:', err);
+    res.status(500).json({ message: 'Server error' });
+  }
+};

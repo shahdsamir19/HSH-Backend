@@ -4,6 +4,9 @@ import setupMission from './mission.socket.js';
 import setupBattle from './battle.socket.js';
 import setupCommunity from './community.socket.js';
 
+import jwt from 'jsonwebtoken';
+import User from '../models/user.model.js';
+
 let io;
 
 export const initializeSocket = (server) => {
@@ -11,6 +14,31 @@ export const initializeSocket = (server) => {
     cors: {
       origin: '*', // Restrict in production
       methods: ['GET', 'POST']
+    }
+  });
+
+  // Socket.IO authentication middleware
+  io.use((socket, next) => {
+    const token = socket.handshake.auth?.token || socket.handshake.query?.token;
+    if (token) {
+      jwt.verify(token, process.env.JWT_SECRET || 'secret123', async (err, decoded) => {
+        if (err) {
+          console.warn('Socket token verification failed:', err.message);
+          return next();
+        }
+        socket.userId = decoded.id?.toString();
+        try {
+          const user = await User.findByPk(decoded.id);
+          if (user) {
+            socket.username = `${user.firstName} ${user.lastName}`;
+          }
+        } catch (e) {
+          console.error('Error fetching user for socket auth:', e);
+        }
+        next();
+      });
+    } else {
+      next();
     }
   });
 

@@ -22,3 +22,22 @@ export const authMiddleware = async (req, res, next) => {
     return res.status(401).json({ message: "Invalid token" });
   }
 };
+
+import { isStage1Completed } from '../services/Progress.service.js';
+
+export const arenaUnlockMiddleware = async (req, res, next) => {
+  try {
+    const user = req.user;
+    if (!user) {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
+    const unlocked = await isStage1Completed(user);
+    if (!unlocked) {
+      return res.status(403).json({ message: "Access Denied: You must complete Stage 1 (Levels 1–4) to unlock the Cyber Arena." });
+    }
+    next();
+  } catch (err) {
+    console.error('Error in arenaUnlockMiddleware:', err);
+    res.status(500).json({ message: 'Server error verifying stage unlock' });
+  }
+};

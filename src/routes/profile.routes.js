@@ -8,17 +8,17 @@ import {
   markNotificationsRead,
   respondFriendRequest
 } from '../controllers/profile.controller.js';
-import { authMiddleware } from '../middlewares/auth.middleware.js';
+import { authMiddleware, arenaUnlockMiddleware } from '../middlewares/auth.middleware.js';
 
 const router = express.Router();
 
-router.get('/notifications', authMiddleware, getNotifications);
-router.post('/notifications/read', authMiddleware, markNotificationsRead);
-router.get('/friends', authMiddleware, getFriends);
-router.post('/friends/add', authMiddleware, addFriend);
-router.post('/friends/respond', authMiddleware, respondFriendRequest);
-router.post('/avatar', authMiddleware, updateAvatar);
-router.get('/', authMiddleware, getProfile);
-router.get('/:id', authMiddleware, getProfile);
+router.get('/notifications', authMiddleware, arenaUnlockMiddleware, getNotifications);
+router.post('/notifications/read', authMiddleware, arenaUnlockMiddleware, markNotificationsRead);
+router.get('/friends', authMiddleware, arenaUnlockMiddleware, getFriends);
+router.post('/friends/add', authMiddleware, arenaUnlockMiddleware, addFriend);
+router.post('/friends/respond', authMiddleware, arenaUnlockMiddleware, respondFriendRequest);
+router.post('/avatar', authMiddleware, arenaUnlockMiddleware, updateAvatar);
+router.get('/', authMiddleware, arenaUnlockMiddleware, getProfile);
+router.get('/:id', authMiddleware, arenaUnlockMiddleware, getProfile);
 
 export default router;

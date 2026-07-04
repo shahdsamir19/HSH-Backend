@@ -117,4 +117,47 @@ const formatLevelRow = (row) => ({
   completedAt: row.completedAt,
 });
 
+export const isStage1Completed = async (user) => {
+  if (!user) return false;
+  const requiredLevels = [1, 2, 3, 4];
+  const userLevels = user.completedLevels || [];
+  const completedArrayCheck = requiredLevels.every(lvl => 
+    userLevels.includes(lvl) || userLevels.includes(lvl.toString())
+  );
+  if (completedArrayCheck) return true;
+
+  const rows = await UserLevelProgress.findAll({
+    where: {
+      userId: user.id,
+      levelId: requiredLevels,
+      status: 'passed'
+    }
+  });
+  return rows.length >= requiredLevels.length;
+};
+
+export const getUnlockedStage = async (user) => {
+  if (!user) return 0;
+  
+  let userLevels = user.completedLevels || [];
+  let levelsPassed = new Set(userLevels.map(l => parseInt(l, 10)));
+  
+  // Also check UserLevelProgress just in case
+  const rows = await UserLevelProgress.findAll({
+    where: { userId: user.id, status: 'passed' }
+  });
+  rows.forEach(r => levelsPassed.add(r.levelId));
+  
+  const hasLevels = (reqLevels) => reqLevels.every(lvl => levelsPassed.has(lvl));
+  
+  const stage3Reqs = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+  const stage2Reqs = [1, 2, 3, 4, 5, 6, 7];
+  const stage1Reqs = [1, 2, 3, 4];
+  
+  if (hasLevels(stage3Reqs)) return 3;
+  if (hasLevels(stage2Reqs)) return 2;
+  if (hasLevels(stage1Reqs)) return 1;
+  return 0;
+};
+
 export { formatLevelRow };
